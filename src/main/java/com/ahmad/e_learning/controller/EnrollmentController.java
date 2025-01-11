@@ -6,6 +6,7 @@ import com.ahmad.e_learning.response.ApiResponse;
 import com.ahmad.e_learning.service.enrollment.EnrollmentService;
 import com.ahmad.e_learning.service.enrollment.IEnrollmentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EnrollmentController {
         this.enrollmentService = enrollmentService;
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/enroll/all")
     public ResponseEntity<ApiResponse> getAllEnrollments() {
         try {
@@ -41,6 +43,7 @@ public class EnrollmentController {
         }
     }
 
+//    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping("/enroll/{studentId}/studentId")
     public ResponseEntity<ApiResponse> getEnrollmentByStudentId(@PathVariable Long studentId){
         try {
