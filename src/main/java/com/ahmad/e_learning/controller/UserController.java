@@ -12,6 +12,7 @@ import com.ahmad.e_learning.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,7 +61,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/add")
+    @PostMapping("/register")
     public ResponseEntity<ApiResponse> addUser(@RequestBody CreateUserRequest request){
         try {
             User user = userService.createUser(request);
@@ -83,6 +84,7 @@ public class UserController {
 
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/user/{userId}/delete")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId){
         try {

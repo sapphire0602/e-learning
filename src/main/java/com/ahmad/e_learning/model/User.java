@@ -6,6 +6,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,7 +23,7 @@ import java.util.Set;
 @NoArgsConstructor
 
 @Entity
-public class User {
+public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,6 +32,9 @@ public class User {
 //    @NaturalId
     private String email;
     private String password;
+    private UserRoles name;
+
+    private String token;
 
     @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -45,6 +52,34 @@ public class User {
     )
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
+
+//    @Enumerated(EnumType.STRING)
+//    private Set<UserRoles> role;
+
+//    public Set<UserRoles> getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(Set<UserRoles> role) {
+//        this.role = role;
+//    }
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public UserRoles getName() {
+        return name;
+    }
+
+    public void setName(UserRoles name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -109,4 +144,44 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
+//
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority();
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    @Override
+//    public String getUsername() {
+//        return email;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

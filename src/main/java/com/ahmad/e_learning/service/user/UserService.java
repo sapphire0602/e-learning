@@ -1,5 +1,8 @@
 package com.ahmad.e_learning.service.user;
 
+import com.ahmad.e_learning.UserRoleDetailsService;
+import com.ahmad.e_learning.config.JwtService;
+import com.ahmad.e_learning.config.UserRoleDetails;
 import com.ahmad.e_learning.dto.UserDto;
 import com.ahmad.e_learning.enums.UserRoles;
 import com.ahmad.e_learning.exception.AlreadyExistsException;
@@ -11,6 +14,7 @@ import com.ahmad.e_learning.repository.UserRepository;
 import com.ahmad.e_learning.request.CreateUserRequest;
 import com.ahmad.e_learning.request.UpdateUserRequest;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +27,15 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -37,10 +45,11 @@ public class UserService implements IUserService {
 
     @Override
     public User getUserByEmail(String email) {
-        if (userRepository.existsByEmail(email)){
-            return userRepository.findUserByEmail(email);
-        }
-        throw new ResourceNotFoundException("User with email" + email + "  not found");
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User with email " + email + "not found ! "));
+//        if (userRepository.existsByEmail(email)){
+//            return userRepository.findUserByEmail(email);
+//        }
+//        throw new ResourceNotFoundException("User with email" + email + "  not found");
     }
 
     @Override
@@ -56,10 +65,11 @@ public class UserService implements IUserService {
                 .map(req ->
                 {
                     User user = new User();
+                    String encodedPassword = passwordEncoder.encode(request.getPassword());
                     user.setEmail(request.getEmail());
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
-                    user.setPassword(request.getPassword());
+                    user.setPassword(encodedPassword);
 
                     Set<Role> roles = request.getRoles().stream()
                             .map(roleName -> roleRepository.findByName(UserRoles.valueOf(roleName.toUpperCase()))
@@ -68,6 +78,15 @@ public class UserService implements IUserService {
                     user.setRoles(roles);
 
                     return userRepository.save(user);
+
+//                    UserRoleDetails userRoleDetails = UserRoleDetails.buildUserDetails(user);
+//                    String token = jwtService.generateToken(userRoleDetails);
+//
+//                    savedUser.setToken(token);
+//
+//                    System.out.println("Token in User Object: " + savedUser.getToken());
+//
+//                    return savedUser;
 
                 }).orElseThrow(() -> new AlreadyExistsException("USER ALREADY EXISTS!"));
     }
