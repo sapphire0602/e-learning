@@ -12,6 +12,7 @@ import com.ahmad.e_learning.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class UserController {
     }
 
 
+    @Secured({"ADMIN"})
     @GetMapping("/user/email")
     public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam("email") String email){
         try {
@@ -50,6 +52,7 @@ public class UserController {
         }
     }
 
+    @Secured({"ADMIN"})
     @GetMapping("/user/{userId}/id")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId){
         try {
@@ -72,6 +75,7 @@ public class UserController {
         }
     }
 
+    @Secured({"ADMIN"})
     @PutMapping("/user/{userId}/update")
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserRequest request , @PathVariable Long userId){
         try {
@@ -85,6 +89,7 @@ public class UserController {
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
+    @Secured({"ADMIN"})
     @DeleteMapping("/user/{userId}/delete")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long userId){
         try {
