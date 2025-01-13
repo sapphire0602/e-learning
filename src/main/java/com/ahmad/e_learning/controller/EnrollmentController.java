@@ -6,6 +6,7 @@ import com.ahmad.e_learning.response.ApiResponse;
 import com.ahmad.e_learning.service.enrollment.EnrollmentService;
 import com.ahmad.e_learning.service.enrollment.IEnrollmentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class EnrollmentController {
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @GetMapping("/enroll/all")
     public ResponseEntity<ApiResponse> getAllEnrollments() {
         try {
@@ -33,6 +35,7 @@ public class EnrollmentController {
         }
     }
 
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @GetMapping("/enroll/{courseId}/courseId")
     public ResponseEntity<ApiResponse> getEnrollmentsByCourseId(@PathVariable Long courseId) {
         try {
@@ -44,6 +47,7 @@ public class EnrollmentController {
     }
 
 //    @PreAuthorize("hasRole('STUDENT')")
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @GetMapping("/enroll/{studentId}/studentId")
     public ResponseEntity<ApiResponse> getEnrollmentByStudentId(@PathVariable Long studentId){
         try {
@@ -78,6 +82,7 @@ public class EnrollmentController {
         }
     }
 
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @DeleteMapping("/un-enroll/course/{courseId}/student/{studentId}/delete")
     public ResponseEntity<ApiResponse> unEnrollStudent(@PathVariable Long courseId , @PathVariable Long studentId){
         try {

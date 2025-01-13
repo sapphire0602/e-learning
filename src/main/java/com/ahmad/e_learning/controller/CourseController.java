@@ -9,6 +9,7 @@ import com.ahmad.e_learning.response.ApiResponse;
 import com.ahmad.e_learning.service.course.CourseService;
 import com.ahmad.e_learning.service.course.ICourseService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,8 @@ public class CourseController {
     }
 
 //    @PreAuthorize("hasAuthority('INSTRUCTOR' , 'ADMIN')")
+
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @PostMapping("/course/add")
     public ResponseEntity<ApiResponse> addCourse(@RequestBody AddCourseRequest request){
         try {
@@ -37,6 +40,7 @@ public class CourseController {
         }
     }
 
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @GetMapping("/instructor/{instructorId}/course")
     public ResponseEntity<ApiResponse>  getCourseByInstructor(@PathVariable Long instructorId){
         try {
@@ -83,6 +87,8 @@ public class CourseController {
     }
 
     //@PreAuthorize("hasAnyRole('ADMIN' , 'INSTRUCTOR')")
+
+    @Secured({"ADMIN" , "INSTRUCTOR"})
     @DeleteMapping("/course/{courseId}/delete")
     public ResponseEntity<ApiResponse> deleteCourseById(@PathVariable Long courseId){
         try {
