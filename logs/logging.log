@@ -1,0 +1,13 @@
+2025-01-17 17:08:40,820 : INFO : org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] : [log] : {Initializing Spring DispatcherServlet 'dispatcherServlet'} : 
+2025-01-17 17:08:40,821 : INFO : org.springframework.web.servlet.DispatcherServlet : [initServletBean] : {Initializing Servlet 'dispatcherServlet'} : 
+2025-01-17 17:08:40,822 : INFO : org.springframework.web.servlet.DispatcherServlet : [initServletBean] : {Completed initialization in 1 ms} : 
+2025-01-17 17:08:40,888 : TRACE : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {Tracing get all users method} : 
+2025-01-17 17:08:40,890 : INFO : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {Get All Users Endpoint In Action!} : 
+2025-01-17 17:08:40,890 : INFO : com.ahmad.e_learning.service.user.UserService : [getAllUsers] : {Get All Users method in user service is activated} : 
+2025-01-17 17:08:41,000 : INFO : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {User Service invoked and we got response} : 
+2025-01-17 17:08:41,003 : DEBUG : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {No need to sign in} : 
+2025-01-17 17:09:36,569 : TRACE : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {Tracing get all users method} : 
+2025-01-17 17:09:36,569 : INFO : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {Get All Users Endpoint In Action!} : 
+2025-01-17 17:09:36,570 : INFO : com.ahmad.e_learning.service.user.UserService : [getAllUsers] : {Get All Users method in user service is activated} : 
+2025-01-17 17:09:36,598 : INFO : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {User Service invoked and we got response} : 
+2025-01-17 17:09:36,599 : DEBUG : com.ahmad.e_learning.controller.UserController : [getAllUsers] : {No need to sign in} : 
