@@ -9,6 +9,8 @@ import com.ahmad.e_learning.request.UpdateUserRequest;
 import com.ahmad.e_learning.response.ApiResponse;
 import com.ahmad.e_learning.service.user.IUserService;
 import com.ahmad.e_learning.service.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping("/api/v1")
 public class UserController {
     private final IUserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(IUserService userService) {
         this.userService = userService;
@@ -30,11 +33,16 @@ public class UserController {
 
     @GetMapping("/user/all")
     public ResponseEntity<ApiResponse> getAllUsers(){
+        logger.trace("Tracing get all users method");
+        logger.info("Get All Users Endpoint In Action!");
         try {
             List<User> users = userService.getAllUsers();
             List<UserDto> userDto = userService.getConvertedUsers(users);
+            logger.info("User Service invoked and we got response");
+            logger.debug("No need to sign in");
             return ResponseEntity.ok(new ApiResponse("SUCCESS , USERS RETRIEVED SUCCESSFULLY !" , userDto));
         } catch (Exception e) {
+            logger.debug("Get All Users Exception Caught");
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("Error : USERS NOT FOUND!" , INTERNAL_SERVER_ERROR));
         }
     }

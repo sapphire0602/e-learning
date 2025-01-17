@@ -14,6 +14,8 @@ import com.ahmad.e_learning.repository.UserRepository;
 import com.ahmad.e_learning.request.CreateUserRequest;
 import com.ahmad.e_learning.request.UpdateUserRequest;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     public UserService(UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -40,6 +43,7 @@ public class UserService implements IUserService {
 
     @Override
     public List<User> getAllUsers() {
+        logger.info("Get All Users method in user service is activated");
         return userRepository.findAll();
     }
 
