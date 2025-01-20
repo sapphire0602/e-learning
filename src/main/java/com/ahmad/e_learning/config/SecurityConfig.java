@@ -33,6 +33,12 @@ public class SecurityConfig {
                                 .anyRequest()
                                 .authenticated()
                 )
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                //.loginPage("/oauth2/authorization/github")
+                                .defaultSuccessUrl("/api/v1/user/all", true)
+                                .failureUrl("/api/v1/register")
+                )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
