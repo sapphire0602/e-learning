@@ -8,8 +8,10 @@ import com.ahmad.e_learning.repository.CourseRepository;
 import com.ahmad.e_learning.repository.UserRepository;
 import com.ahmad.e_learning.request.AddCourseRequest;
 import com.ahmad.e_learning.request.CourseUpdateRequest;
+import com.ahmad.e_learning.service.file.FileService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class CourseService implements ICourseService {
     private final CourseRepository courseRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private FileService fileService;
 
     public CourseService(CourseRepository courseRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.courseRepository = courseRepository;
@@ -29,16 +32,23 @@ public class CourseService implements ICourseService {
     public Course addCourse(AddCourseRequest request) {
         User instructor = userRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new ResourceNotFoundException("INSTRUCTOR NOT FOUND !"));
-        return courseRepository.save(createCourse(request , instructor));
+        return courseRepository.save(createCourse(request, instructor));
     }
 
-    private Course createCourse(AddCourseRequest request , User instructor) {
+    private Course createCourse(AddCourseRequest request, User instructor) {
         return new Course(
                 request.getTitle(),
                 request.getDescription(),
                 request.getDuration(),
                 instructor
         );
+    }
+
+    @Override
+    public void uploadFileForCourse(MultipartFile file , Long courseId) {
+//        Course course = courseRepository.findById(courseId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Course Not Found!"));
+        fileService.saveFile(file , courseId);
     }
 
     @Override
@@ -65,23 +75,23 @@ public class CourseService implements ICourseService {
             existingCourse.setDuration(updatedCourse.getDuration());
 
             return courseRepository.save(existingCourse);
-        }).orElseThrow(() -> new ResourceNotFoundException("UNABLE TO UPDATE COURSE " + courseId + " , COURSE DOESN'T EXIST" ));
+        }).orElseThrow(() -> new ResourceNotFoundException("UNABLE TO UPDATE COURSE " + courseId + " , COURSE DOESN'T EXIST"));
     }
 
     @Override
     public void deleteCourse(Long courseId) {
-        courseRepository.findById(courseId).ifPresentOrElse(courseRepository :: delete ,
+        courseRepository.findById(courseId).ifPresentOrElse(courseRepository::delete,
                 () -> new ResourceNotFoundException("Unable to delete course , course ," + courseId + " doesn't exist"));
     }
 
     @Override
-    public List<CourseDto> getConvertedCourses(List<Course> courses){
+    public List<CourseDto> getConvertedCourses(List<Course> courses) {
         return courses.stream().map(this::convertToDto).toList();
     }
 
     @Override
-    public CourseDto convertToDto(Course course){
-        CourseDto courseDto = modelMapper.map(course , CourseDto.class);
+    public CourseDto convertToDto(Course course) {
+        CourseDto courseDto = modelMapper.map(course, CourseDto.class);
         return courseDto;
     }
 }
