@@ -17,11 +17,14 @@ public class Course {
     private String description;
     private int duration;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FileData> fileData;
+
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    @OneToMany(mappedBy = "course" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Enrollment> enrollments;
 
     public Course(Long id, String title, String description, int duration, User instructor, Set<Enrollment> enrollments) {
@@ -35,6 +38,16 @@ public class Course {
 
 
     public Course() {
+    }
+
+    public Course(Long id, String title, String description, int duration, List<FileData> fileData, User instructor, Set<Enrollment> enrollments) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.fileData = fileData;
+        this.instructor = instructor;
+        this.enrollments = enrollments;
     }
 
     public Course(String title, String description, int duration, User instructor) {
@@ -90,5 +103,13 @@ public class Course {
 
     public void setEnrollments(Set<Enrollment> enrollments) {
         this.enrollments = enrollments;
+    }
+
+    public List<FileData> getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(List<FileData> fileData) {
+        this.fileData = fileData;
     }
 }

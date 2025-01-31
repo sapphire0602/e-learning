@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -61,6 +62,17 @@ public class CourseController {
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("ERROR RETRIEVING COURSES !" , null));
         }
+    }
+
+    @PostMapping("/course/{courseId}/upload")
+    public ResponseEntity<ApiResponse> uploadFileForCourse(@RequestParam MultipartFile file , @PathVariable Long courseId){
+        try {
+            courseService.uploadFileForCourse(file , courseId);
+            return ResponseEntity.ok(new ApiResponse("Course with ID : " + courseId + "retrieved successfully ! "  , null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("ERROR UPLOADING MEDIA FOR COURSE !" , null));
+        }
+
     }
 
     @GetMapping("/course/{courseId}/courseId")

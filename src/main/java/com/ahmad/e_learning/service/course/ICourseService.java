@@ -5,11 +5,14 @@ import com.ahmad.e_learning.model.Course;
 import com.ahmad.e_learning.model.User;
 import com.ahmad.e_learning.request.AddCourseRequest;
 import com.ahmad.e_learning.request.CourseUpdateRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ICourseService {
     Course addCourse(AddCourseRequest request);
+
+    void uploadFileForCourse(MultipartFile file, Long courseId);
 
     List<Course> getCourseByInstructor(Long instructorId);
     List<Course> getAllCourses();

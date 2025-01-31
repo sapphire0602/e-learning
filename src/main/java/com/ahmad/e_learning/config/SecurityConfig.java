@@ -18,29 +18,33 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtFilter;
+    private final SuccessHandler successHandler;
 
-    public SecurityConfig(AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtFilter) {
+    public SecurityConfig(AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtFilter, SuccessHandler successHandler) {
         this.authenticationProvider = authenticationProvider;
         this.jwtFilter = jwtFilter;
+        this.successHandler = successHandler;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(customizer -> customizer.disable())
+        http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         request -> request.requestMatchers( "/api/v1/register" , "/api/v1/user/all" , "/api/v1/user/login")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
                 )
-                .oauth2Login(oauth2 ->
-                        oauth2
-                                //.loginPage("/oauth2/authorization/github")
-                                .defaultSuccessUrl("/api/v1/user/all", true)
-                                .failureUrl("/api/v1/register")
-                )
+//                .oauth2Login(oauth2 ->
+//                        oauth2
+//                                //.loginPage("/oauth2/authorization/github")
+//                                .defaultSuccessUrl("/api/v1/user/all", true)
+//                                .failureUrl("/api/v1/register")
+//                )
                 .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .formLogin(form -> form.successHandler(successHandler).defaultSuccessUrl("/api/v1/user/all"))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter , UsernamePasswordAuthenticationFilter.class);
 
